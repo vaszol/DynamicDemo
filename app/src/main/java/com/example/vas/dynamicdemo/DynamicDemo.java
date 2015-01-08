@@ -35,20 +35,41 @@ public class DynamicDemo extends ListActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row=super.getView(position, convertView, parent);
-            //////////////////вычисление иконки
-            ImageView icon=(ImageView)row.findViewById(R.id.icon);
-            if (items[position].length()>4) {
-                icon.setImageResource(R.drawable.delete);
+//            //////////////////вычисление иконки
+//            ImageView icon=(ImageView)row.findViewById(R.id.icon);
+//            if (items[position].length()>4) {
+//                icon.setImageResource(R.drawable.delete);
+//            }
+//            else {
+//                icon.setImageResource(R.drawable.ok);
+//            }
+//            /////////////////вычисление длины слова
+//            TextView size=(TextView)row.findViewById(R.id.size);
+//            size.setText(String.format(getString(R.string.size_template),
+//                    items[position].length()));
+//добавляем в проект "паттерн ViewHolder"
+            ViewHolder holder=(ViewHolder)row.getTag();
+            if (holder==null) {
+                holder=new ViewHolder(row);
+                row.setTag(holder);
+            }
+            //////////////////выбор иконки для строки
+            if (getModel(position).length()>4) {
+                holder.icon.setImageResource(R.drawable.delete);
             }
             else {
-                icon.setImageResource(R.drawable.ok);
+                holder.icon.setImageResource(R.drawable.ok);
             }
-            /////////////////вычисление длины слова
-            TextView size=(TextView)row.findViewById(R.id.size);
-            size.setText(String.format(getString(R.string.size_template),
+            //////////////////вывод значения "Size /d"
+            holder.size.setText(String.format(getString(R.string.size_template),
                     items[position].length()));
+
             return(row);
         }
+    }
+//возвращает строку из модели по указанной позиции
+    private String getModel(int position) {
+        return(((IconicAdapter)getListAdapter()).getItem(position));
     }
 
     @Override
